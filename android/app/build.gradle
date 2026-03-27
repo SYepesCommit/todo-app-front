@@ -22,6 +22,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    project.ext.set("archivesBaseName", "MisTareas-v1.0")
 }
 
 repositories {
