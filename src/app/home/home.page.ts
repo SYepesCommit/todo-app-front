@@ -60,6 +60,16 @@ export class HomePage {
       return;
     }
 
+    const isDuplicate = this.todoService.getTasksValue().some(task =>
+      task.title.toLowerCase() === title.toLowerCase() &&
+      task.categoryId === this.selectedCategoryId
+    );
+
+    if (isDuplicate) {
+      this.notification.showToast('Esta tarea ya existe en esta categoría', 'warning');
+      return;
+    }
+
     this.todoService.addTasks({
       title: title,
       categoryId: this.selectedCategoryId
