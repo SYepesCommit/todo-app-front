@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Mis Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="add-task-card ion-padding">
+    <ion-item lines="full" class="task-input-item">
+      <ion-input label="Tarea" labelPlacement="stacked" placeholder="¿Qué hay que hacer?" [(ngModel)]="newTaskTitle"
+        (keyup.enter)="addTask()">
+      </ion-input>
+    </ion-item>
+
+    @if (categoryService.categories$ | async; as cats) {
+    <p class="section-title">
+      {{ cats.length === 0 ? 'Crea una categoría para tus tareas' : 'Selecciona una categoría:' }}
+    </p>
+    }
+
+    <div class="category-scroll-container">
+      @for (cat of (categoryService.categories$ | async); track cat.id) {
+      <div class="category-pill" [class.selected]="selectedCategoryId === cat.id"
+        [style.background-color]="selectedCategoryId === cat.id ? cat.color : 'var(--ion-color-light-shade)'"
+        [style.color]="selectedCategoryId === cat.id ? 'white' : 'var(--ion-color-dark)'"
+        [style.border-color]="cat.color" (click)="selectedCategoryId = cat.id">
+        {{ cat.name }}
+      </div>
+      }
+    </div>
+
+    <ion-button expand="block" class="add-button ion-margin-top" (click)="addTask()" [disabled]="!newTaskTitle.trim()">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Añadir Tarea
+    </ion-button>
+    <div class="ion-text-center ion-margin-top">
+      @if (categoryService.categories$ | async; as cats) {
+      <ion-button fill="clear" size="small" (click)="openCategories()"
+        [color]="cats.length === 0 ? 'primary' : 'medium'">
+        <ion-icon [name]="cats.length === 0 ? 'add-circle-outline' : 'settings-outline'" slot="start">
+        </ion-icon>
+        {{ cats.length === 0 ? 'Crear mi primera categoría' : 'Gestionar Categorías' }}
+      </ion-button>
+      }
+    </div>
+  </div>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Pendientes</ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none" class="filter-section">
+      <ion-icon name="funnel-outline" slot="start" size="small"></ion-icon>
+      <ion-select label="Filtrar por:" interface="action-sheet" value="" (ionChange)="changeFilter($event)">
+        <ion-select-option value="">Todas las tareas</ion-select-option>
+        @for (cat of (categoryService.categories$ | async); track cat.id) {
+        <ion-select-option [value]="cat.id">{{ cat.name }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
+    @for (task of (todoService.filteredTasks$ | async); track task.id) {
+    <ion-item-sliding>
+      <ion-item>
+        <ion-checkbox slot="start" [checked]="task.completed" (ionChange)="toggleTask(task.id)"></ion-checkbox>
+        <ion-label [class.completed]="task.completed">
+          <h2 class="taskTitle">{{ task.title }}</h2>
+
+          @if (task.categoryId) {
+          <ion-badge [style.--background]="task.categoryColor">
+            {{ task.categoryName }}
+          </ion-badge>
+          }
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="deleteTask(task.id)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    } @empty {
+    <div class="ion-text-center ion-padding gray-text">
+      <p>No tienes tareas pendientes.</p>
+    </div>
+    }
+  </ion-list>
+</ion-content>
