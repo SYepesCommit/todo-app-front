@@ -1,0 +1,34 @@
+.color-dot {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: auto;
+  border: 2px solid transparent;
+  transition: transform 0.2s;
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.small-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.create-section {
+  margin-bottom: 20px;
+}
+
+.checkMark-class {
+  color: white;
+}
+
+.taskTitle-class {
+  font-weight: 600;
+}

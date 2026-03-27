@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{ isEditing ? 'Editar' : 'Gestionar' }} Categorías</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="create-section">
+    <ion-item lines="full">
+      <ion-label position="stacked">Nombre de la Categoría</ion-label>
+      <ion-input [(ngModel)]="categoryName" placeholder="Ej: Trabajo, Casa..." (keyup.enter)="saveCategory()">
+      </ion-input>
+    </ion-item>
+
+    <p class="ion-padding-start">Selecciona un color:</p>
+    <ion-grid>
+      <ion-row>
+        @for (color of colors; track color) {
+        <ion-col size="2">
+          <div class="color-dot" [style.background-color]="color" (click)="selectedColor = color"
+            [class.active-color]="selectedColor === color">
+            @if (selectedColor === color) {
+            <ion-icon name="checkmark-outline" class="checkMark-class"></ion-icon>
+            }
+          </div>
+        </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+
+
+    <ion-button expand="block" class="ion-margin-top" (click)="saveCategory()" [disabled]="!categoryName.trim()">
+
+      <ion-icon [name]="isEditing ? 'save-outline' : 'add-outline'" slot="start"></ion-icon>
+      {{ isEditing ? 'Guardar Cambios' : 'Crear Categoría' }}
+    </ion-button>
+
+    @if (isEditing) {
+    <ion-button expand="block" fill="clear" color="medium" (click)="resetForm()">
+      Cancelar Edición
+    </ion-button>
+    }
+  </div>
+
+  <hr class="separator" />
+
+  <ion-list lines="none">
+    <p class="ion-padding-start section-subtitle">Tus categorías:</p>
+
+    @for (category of (categoryService.categories$ | async); track category.id) {
+    <ion-item class="category-item">
+      <div slot="start" class="small-dot" [style.background-color]="category.color"></div>
+      <ion-label>
+        <h2>{{ category.name }}</h2>
+      </ion-label>
+      @if((configService.values$ | async)?.['show_edit_category']){
+      <ion-button slot="end" fill="clear" color="primary" (click)="editCategory(category)">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      }
+
+
+      <ion-button slot="end" fill="clear" color="danger" (click)="deleteCategory(category.id)">
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+    } @empty {
+    <div class="ion-text-center ion-padding gray-text">
+      <p>No hay categorías creadas aún.</p>
+    </div>
+    }
+  </ion-list>
+</ion-content>
