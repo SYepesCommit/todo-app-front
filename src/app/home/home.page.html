@@ -64,15 +64,17 @@
     <ion-item-sliding>
       <ion-item>
         <ion-checkbox slot="start" [checked]="task.completed" (ionChange)="toggleTask(task.id)"></ion-checkbox>
+
         <ion-label [class.completed]="task.completed">
           <h2 class="taskTitle">{{ task.title }}</h2>
-
           @if (task.categoryId) {
           <ion-badge [style.--background]="task.categoryColor">
             {{ task.categoryName }}
           </ion-badge>
           }
         </ion-label>
+
+        <ion-icon name="reorder-three-outline" slot="end" color="medium" class="swipe-indicator"></ion-icon>
       </ion-item>
 
       <ion-item-options side="end">

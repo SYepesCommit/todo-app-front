@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { trashOutline, addOutline,checkmarkCircleOutline, createOutline, closeOutline, settingsOutline,addCircleOutline} from 'ionicons/icons';
+import { trashOutline, addOutline,reorderThreeOutline ,checkmarkCircleOutline, createOutline, closeOutline, settingsOutline,addCircleOutline} from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { ConfigService } from './services/remote-config';
 
@@ -20,7 +20,8 @@ export class AppComponent {
       'create-outline': createOutline,
       'close-outline': closeOutline,
       'settings-outline': settingsOutline,
-      'add-circle-outline': addCircleOutline
+      'add-circle-outline': addCircleOutline,
+      'reorder-three-outline': reorderThreeOutline
     });
   }
 }
